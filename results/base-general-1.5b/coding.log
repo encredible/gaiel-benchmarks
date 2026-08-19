@@ -1,3 +1,5 @@
 Fetching 9 files:   0%|          | 0/9 [00:00<?, ?it/s]Fetching 9 files: 100%|██████████| 9/9 [00:00<00:00, 126.48it/s]
   0%|          | 0/164 [00:00<?, ?it/s] 53%|█████▎    | 87/164 [00:00<00:00, 865.85it/s]100%|██████████| 164/164 [00:00<00:00, 907.71it/s]
   0%|          | 0/378 [00:00<?, ?it/s] 20%|██        | 76/378 [00:00<00:00, 751.32it/s] 40%|████      | 153/378 [00:00<00:00, 757.53it/s] 61%|██████    | 230/378 [00:00<00:00, 760.73it/s] 82%|████████▏ | 311/378 [00:00<00:00, 777.04it/s]100%|██████████| 378/378 [00:00<00:00, 773.74it/s]
+/Users/K/.local/share/uv/python/cpython-3.13.13-macos-aarch64-none/lib/python3.13/multiprocessing/resource_tracker.py:400: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-1436-_dautxy9'}
+  warnings.warn(

@@ -2,7 +2,9 @@
 # 사용법: run_eval.sh <suite: korean|coding> <tag> <model>
 # 결과는 results/<tag>/ 에 lm-eval 원본 JSON 그대로 저장한다 (가공 없음).
 set -u
-PY="${MLX_PY:-/Users/K/omni-universe/omni-llm-engine/venv/bin}"
+# mlx_lm 실행 파일이 있는 디렉터리. 가상환경을 쓰면 MLX_PY 로 지정한다.
+#   예) MLX_PY=~/myenv/bin ./scripts/run_eval.sh korean base-1.5b <model>
+PY="${MLX_PY:-$(dirname "$(command -v mlx_lm.evaluate 2>/dev/null || echo /usr/local/bin/mlx_lm.evaluate)")}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SUITE=$1; TAG=$2; MODEL=$3
 OUT="$ROOT/results/$TAG"; mkdir -p "$OUT"
