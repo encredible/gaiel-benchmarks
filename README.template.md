@@ -25,6 +25,11 @@
 
 단위는 % 입니다. 한국어는 정확도(logprob), 코딩은 pass@1(생성 코드 실제 실행)입니다.
 
+## 작업 기록
+
+전체 조사 과정, **틀렸던 판단들**, 확립한 규칙은 **[docs/JOURNAL.md](docs/JOURNAL.md)** 에 있습니다.
+RunPod 환경 구축에서 막힌 지점과 해결책은 **[docs/RUNPOD.md](docs/RUNPOD.md)** 입니다.
+
 ## 공개 수치 참고
 
 벤더가 발표한 수치는 **[docs/REFERENCE.md](docs/REFERENCE.md)** 에 출처와 함께 별도로 두었습니다.
