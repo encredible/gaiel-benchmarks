@@ -8,11 +8,11 @@ ROOT = Path(__file__).resolve().parent.parent
 RES, INP = ROOT / "results", ROOT / "inputs"
 
 KOREAN = ["kobest_boolq","kobest_copa","kobest_hellaswag","kobest_sentineg","kobest_wic","haerae"]
-CODING = ["humaneval_instruct","mbpp_plus_instruct"]
+CODING = ["humaneval_instruct"]   # mbpp_plus_instruct 는 하네스 결함으로 제외 (README 참조)
 # 우연 수준(무작위 선택 기대값). 이 선을 못 넘으면 해당 과제를 푸는 능력이 없다는 뜻이다.
 CHANCE = {"kobest_boolq":.50, "kobest_copa":.50, "kobest_hellaswag":.25,
           "kobest_sentineg":.50, "kobest_wic":.50, "haerae":.20,
-          "humaneval_instruct":.0, "mbpp_plus_instruct":.0}
+          "humaneval_instruct":.0}
 # tag -> 비교 기준 베이스 tag
 PAIRS = {"gaiel-1.5b":"base-1.5b", "gaiel-7b":"base-7b", "gaiel-32b":"base-32b",
          "gaiel-coding-1.5b":"base-coder-1.5b", "gaiel-korean-1.5b":"base-coder-1.5b"}
@@ -22,7 +22,7 @@ def primary(d):
     for k, v in d.items():
         if "stderr" in k or not isinstance(v, (int, float)): continue
         m = k.split(",")[0]
-        if m in ("acc","pass@1","exact_match","acc_norm"):
+        if m in ("acc","pass@1","pass_at_1","exact_match","acc_norm"):
             se = d.get(k.replace(m, m+"_stderr", 1))
             return m, float(v), (float(se) if isinstance(se,(int,float)) else 0.0)
     return None, None, 0.0
@@ -31,10 +31,12 @@ def load():
     out = {}                      # tag -> {task: (metric, value, n)}
     for tagdir in sorted(p for p in RES.iterdir() if p.is_dir()):
         scores = {}
-        for f in tagdir.glob("eval_*"):
+        for f in list(tagdir.glob("eval_*")) + list(tagdir.glob("lmeval_*.json")):
             try: doc = json.loads(f.read_text())
             except Exception: continue
+            doc = doc.get("results", doc)      # lm-eval CLI 는 results 키 아래에 담는다
             for task, d in doc.items():
+                if not isinstance(d, dict): continue
                 m, v, se = primary(d)
                 if v is not None: scores[task] = (m, v, d.get("sample_len"), se)
         if scores: out[tagdir.name] = scores
