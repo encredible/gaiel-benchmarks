@@ -245,3 +245,15 @@
   gaiel-32b: 12개 태스크
   gaiel-7b: 13개 태스크
   gaiel-8b: 12개 태스크
+16:24:16 푸시 완료 (모델 10개)
+수집 완료: 모델 10개 → results/summary.csv, README.md
+  base-1.5b: 13개 태스크
+  base-32b: 12개 태스크
+  base-7b: 13개 태스크
+  base-8b: 12개 태스크
+  base-coder-1.5b: 13개 태스크
+  base-coder-7b: 2개 태스크
+  gaiel-1.5b: 13개 태스크
+  gaiel-32b: 12개 태스크
+  gaiel-7b: 13개 태스크
+  gaiel-8b: 12개 태스크
