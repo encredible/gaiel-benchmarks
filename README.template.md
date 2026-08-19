@@ -69,11 +69,12 @@ results/
 
 ## 알려진 한계
 
-- **`mbpp_plus_instruct` 는 표에서 제외했습니다.** 모든 모델이 pass@1 ≈ 0.0 을 기록했는데,
-  같은 모델이 HumanEval 에서 57~88% 를 받습니다. 이는 모델 능력이 아니라 `extract_code` 필터가
-  챗 템플릿 출력 형식과 맞지 않아 코드 추출에 실패한 **하네스 결함**입니다. 원본 JSON 에는
-  0.0 이 그대로 남아 있으니 `results/*/lmeval_coding.json` 에서 직접 확인할 수 있습니다.
-  수정 후 다시 채울 예정입니다.
+- **챗 템플릿 적용 규칙**: `*_instruct` 태스크는 `--apply_chat_template` 가 **필요**하고,
+  비-instruct 태스크(`humaneval_plus`, `mbpp_plus`)에 걸면 **채점이 0 이 됩니다.**
+  30문항 진단으로 확인했습니다 — 동일 모델 기준 `mbpp_plus` 76.7 vs `mbpp_plus_instruct` 0.0.
+  `mbpp_plus_instruct` 는 `extract_code` 필터 결함으로 사용하지 않고, 비-instruct 변형을 씁니다.
+- **Δ 는 양쪽이 모두 가진 과제에서만 계산합니다.** 과제 집합이 다른데 평균끼리 빼면
+  회귀가 개선으로 뒤집힙니다. 공통 과제 수가 다르면 표에 `(N개 공통)` 으로 표시합니다.
 - **LogicKor는 기본 스위트에서 제외**했습니다. GPT-4급 judge 모델이 필요해 비용이 발생하고,
   judge 모델 버전에 따라 점수가 흔들려 재현성이 떨어집니다. 문항은 `inputs/logickor/` 에 두었습니다.
 - 32B/72B는 로컬 램 제약으로 측정이 지연되고 있습니다.

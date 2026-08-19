@@ -8,11 +8,11 @@ ROOT = Path(__file__).resolve().parent.parent
 RES, INP = ROOT / "results", ROOT / "inputs"
 
 KOREAN = ["kobest_boolq","kobest_copa","kobest_hellaswag","kobest_sentineg","kobest_wic","haerae"]
-CODING = ["humaneval_instruct"]   # mbpp_plus_instruct 는 하네스 결함으로 제외 (README 참조)
+CODING = ["humaneval_instruct","humaneval_plus","mbpp_plus"]
 # 우연 수준(무작위 선택 기대값). 이 선을 못 넘으면 해당 과제를 푸는 능력이 없다는 뜻이다.
 CHANCE = {"kobest_boolq":.50, "kobest_copa":.50, "kobest_hellaswag":.25,
           "kobest_sentineg":.50, "kobest_wic":.50, "haerae":.20,
-          "humaneval_instruct":.0}
+          "humaneval_instruct":.0, "humaneval_plus":.0, "mbpp_plus":.0}
 # tag -> 비교 기준 베이스 tag
 PAIRS = {"gaiel-1.5b":"base-1.5b", "gaiel-7b":"base-7b", "gaiel-32b":"base-32b",
          "gaiel-8b":"base-8b", "gaiel-72b":"base-72b",
@@ -78,10 +78,14 @@ def table(data, tasks, title):
         # 우연 수준을 못 넘은 과제 수
         nchance = sum(1 for t in tasks if t in sc and at_chance(t, sc[t][1], sc[t][3]))
         if base and base in data:
-            b = avg(data[base], tasks)
-            if a is not None and b is not None:
-                d = (a-b)*100
-                delta = f"**{d:+.1f}**"
+            # Δ 는 양쪽이 모두 가진 과제에서만 계산한다.
+            # 과제 집합이 다르면 평균끼리 빼는 것은 무의미하고, 회귀를 개선으로 뒤집는다.
+            common = [t for t in tasks if t in sc and t in data[base]]
+            a_c, b_c = avg(sc, common), avg(data[base], common)
+            if a_c is not None and b_c is not None:
+                d = (a_c-b_c)*100
+                partial = "" if len(common) == len([t for t in tasks if t in data[base]]) else f" ({len(common)}개 공통)"
+                delta = f"**{d:+.1f}**{partial}"
                 verdict = "⚠️ 회귀" if d < -1 else ("✅ 개선" if d > 1 else "≈ 동등")
         if nchance >= len(tasks)//2 and nchance > 0:
             verdict = (verdict + " · " if verdict else "") + f"ˣ{nchance}개 우연이하"
