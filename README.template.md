@@ -25,6 +25,11 @@
 
 단위는 % 입니다. 한국어는 정확도(logprob), 코딩은 pass@1(생성 코드 실제 실행)입니다.
 
+## 관련 저장소
+
+- **[encredible/gaiel-llm-engine](https://github.com/encredible/gaiel-llm-engine)** — MLX 추론 서버,
+  저비트 양자화 도구, 파인튜닝 감사 결과와 재학습 계획
+
 ## 작업 기록
 
 전체 조사 과정, **틀렸던 판단들**, 확립한 규칙은 **[docs/JOURNAL.md](docs/JOURNAL.md)** 에 있습니다.
