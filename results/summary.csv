@@ -1,1 +1,12 @@
 tag,task,metric,value,n
+gaiel-1.5b,haerae,acc,0.2878,1091
+gaiel-1.5b,haerae_general_knowledge,acc,0.2955,176
+gaiel-1.5b,haerae_history,acc,0.1915,188
+gaiel-1.5b,haerae_loan_word,acc,0.2544,169
+gaiel-1.5b,haerae_rare_word,acc,0.3432,405
+gaiel-1.5b,haerae_standard_nomenclature,acc,0.2876,153
+gaiel-1.5b,kobest_boolq,acc,0.5064,1404
+gaiel-1.5b,kobest_copa,acc,0.5560,1000
+gaiel-1.5b,kobest_hellaswag,acc,0.3420,500
+gaiel-1.5b,kobest_sentineg,acc,0.5113,397
+gaiel-1.5b,kobest_wic,acc,0.4889,1260
