@@ -1,0 +1,14 @@
+# 평가 대상. MLX 4-bit 로 통일해 양자화 조건을 맞춘다.
+# base 는 각 Gaiel 모델의 베이스로, 튜닝이 이득인지 손해인지 판별하는 기준선이다.
+korean:
+  - {tag: gaiel-1.5b, model: encredible/Gaiel-1.5B-Korean-Tuned-MLX,  role: tuned, base_of: base-1.5b}
+  - {tag: base-1.5b,  model: mlx-community/Qwen2.5-1.5B-Instruct-4bit, role: base}
+  - {tag: gaiel-7b,   model: encredible/Gaiel-7B-Korean-Tuned-MLX,     role: tuned, base_of: base-7b}
+  - {tag: base-7b,    model: mlx-community/Qwen2.5-7B-Instruct-4bit,   role: base}
+  - {tag: gaiel-32b,  model: encredible/Gaiel-32B-Korean-Tuned-MLX,    role: tuned, base_of: base-32b}
+  - {tag: base-32b,   model: mlx-community/Qwen2.5-32B-Instruct-4bit,  role: base}
+coding:
+  - {tag: base-coder-1.5b,   model: mlx-community/Qwen2.5-Coder-1.5B-Instruct-4bit, role: base}
+  - {tag: base-general-1.5b, model: mlx-community/Qwen2.5-1.5B-Instruct-4bit,       role: base}
+  - {tag: gaiel-coding-1.5b, model: encredible/Gaiel-1.5B-Coding-Tuned-MLX,         role: tuned}
+  - {tag: gaiel-korean-1.5b, model: encredible/Gaiel-1.5B-Korean-Tuned-MLX,         role: control}
