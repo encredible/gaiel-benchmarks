@@ -25,3 +25,9 @@
   base-coder-1.5b: 13개 태스크
   base-coder-7b: 2개 태스크
 12:53:30 푸시 완료 (모델 4개)
+수집 완료: 모델 5개 → results/summary.csv, README.md
+  base-1.5b: 13개 태스크
+  base-7b: 13개 태스크
+  base-coder-1.5b: 13개 태스크
+  base-coder-7b: 2개 태스크
+  gaiel-1.5b: 13개 태스크
