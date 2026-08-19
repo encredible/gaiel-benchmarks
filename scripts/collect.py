@@ -15,6 +15,7 @@ CHANCE = {"kobest_boolq":.50, "kobest_copa":.50, "kobest_hellaswag":.25,
           "humaneval_instruct":.0}
 # tag -> 비교 기준 베이스 tag
 PAIRS = {"gaiel-1.5b":"base-1.5b", "gaiel-7b":"base-7b", "gaiel-32b":"base-32b",
+         "gaiel-8b":"base-8b", "gaiel-72b":"base-72b",
          "gaiel-coding-1.5b":"base-coder-1.5b", "gaiel-korean-1.5b":"base-coder-1.5b"}
 
 def primary(d):
