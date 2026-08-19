@@ -53,3 +53,16 @@ gaiel-1.5b,kobest_hellaswag,acc,0.3420,0.0212,500,no
 gaiel-1.5b,kobest_sentineg,acc,0.5239,0.0251,397,yes
 gaiel-1.5b,kobest_wic,acc,0.4897,0.0141,1260,yes
 gaiel-1.5b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
+gaiel-7b,haerae,acc,0.5729,0.0145,1091,no
+gaiel-7b,haerae_general_knowledge,acc,0.3977,0.0370,176,no
+gaiel-7b,haerae_history,acc,0.4043,0.0359,188,no
+gaiel-7b,haerae_loan_word,acc,0.6036,0.0377,169,no
+gaiel-7b,haerae_rare_word,acc,0.6790,0.0232,405,no
+gaiel-7b,haerae_standard_nomenclature,acc,0.6667,0.0382,153,no
+gaiel-7b,humaneval_instruct,pass@1,0.7927,0.0318,164,no
+gaiel-7b,kobest_boolq,acc,0.6481,0.0127,1404,no
+gaiel-7b,kobest_copa,acc,0.6840,0.0147,1000,no
+gaiel-7b,kobest_hellaswag,acc,0.4360,0.0222,500,no
+gaiel-7b,kobest_sentineg,acc,0.6700,0.0236,397,no
+gaiel-7b,kobest_wic,acc,0.4905,0.0141,1260,yes
+gaiel-7b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
