@@ -9,6 +9,9 @@ RES, INP = ROOT / "results", ROOT / "inputs"
 
 KOREAN = ["kobest_boolq","kobest_copa","kobest_hellaswag","kobest_sentineg","kobest_wic","haerae"]
 CODING = ["humaneval_instruct","humaneval_plus","mbpp_plus"]
+# extract_code 필터 결함으로 전 모델 0.0 이 나오는 태스크. 원본 JSON 에는 남기되
+# summary.csv 에서는 뺀다 — 평균 집계에 섞이면 회귀 판정이 오염된다.
+EXCLUDE = {"mbpp_plus_instruct"}
 # 우연 수준(무작위 선택 기대값). 이 선을 못 넘으면 해당 과제를 푸는 능력이 없다는 뜻이다.
 CHANCE = {"kobest_boolq":.50, "kobest_copa":.50, "kobest_hellaswag":.25,
           "kobest_sentineg":.50, "kobest_wic":.50, "haerae":.20,
@@ -89,9 +92,16 @@ def table(data, tasks, title):
                 verdict = "⚠️ 회귀" if d < -1 else ("✅ 개선" if d > 1 else "≈ 동등")
         if nchance >= len(tasks)//2 and nchance > 0:
             verdict = (verdict + " · " if verdict else "") + f"ˣ{nchance}개 우연이하"
-        lines.append(f"| `{tag}` | " + " | ".join(cells) + f" | **{fmt(a)}** | {delta} | {verdict or '—'} |")
+        # 평균의 분모(실제 측정된 과제 수)를 함께 적는다. 행마다 분모가 다른데
+        # 숫자만 나란히 두면 3과제 평균과 1과제 평균을 같은 것으로 읽게 된다.
+        nhave = sum(1 for t in tasks if t in sc)
+        amark = f"**{fmt(a)}**" + (f" _({nhave}/{len(tasks)})_" if nhave < len(tasks) else "")
+        lines.append(f"| `{tag}` | " + " | ".join(cells) + f" | {amark} | {delta} | {verdict or '—'} |")
     lines.append("")
     lines.append("`ˣ` = 표준오차 범위 안에서 우연 수준과 구분되지 않음 (그 과제를 실제로 풀지 못한다는 뜻)")
+    lines.append("")
+    lines.append("**평균 옆의 _(n/m)_ 은 m개 과제 중 n개만 측정됐다는 뜻이다.** 분모가 다른 평균끼리는 "
+                 "비교할 수 없다 — 옆줄과 견주려면 Δ 열을 보라. Δ 는 양쪽이 모두 가진 과제에서만 계산한다.")
     return "\n".join(lines) + "\n"
 
 def main():
@@ -101,6 +111,7 @@ def main():
         w = csv.writer(f); w.writerow(["tag","task","metric","value","stderr","n","at_chance"])
         for tag, s in sorted(data.items()):
             for task,(m,v,n,se) in sorted(s.items()):
+                if task in EXCLUDE: continue
                 w.writerow([tag,task,m,f"{v:.4f}",f"{se:.4f}",n,
                             "yes" if at_chance(task,v,se) else "no"])
 

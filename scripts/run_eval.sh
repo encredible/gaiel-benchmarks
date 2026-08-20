@@ -10,20 +10,39 @@ SUITE=$1; TAG=$2; MODEL=$3
 OUT="$ROOT/results/$TAG"; mkdir -p "$OUT"
 [ -f "$OUT/DONE.$SUITE" ] && { echo "[$TAG/$SUITE] 완료됨 — 건너뜀"; exit 0; }
 
+# 챗 템플릿 적용 규칙 — 어기면 채점이 통째로 0 이 된다.
+#   *_instruct 태스크        : --apply-chat-template 가 필요하다.
+#   비-instruct(_plus) 태스크: 걸면 안 된다. 완성(completion) 형식으로 채점된다.
+# 그래서 코딩 스위트는 한 번에 못 돌리고 두 패스로 나눈다.
+# `mbpp_plus_instruct` 는 extract_code 필터 결함으로 전 모델 0.0 이 나온다 — 쓰지 않는다.
+run_pass() {  # $1=패스이름  $2=태스크들  $3=추가플래그
+  local name=$1 tasks=$2 extra=${3:-}
+  echo ">>> [$TAG/$SUITE:$name] $MODEL  $(date '+%F %T')"
+  "$PY/mlx_lm.evaluate" --model "$MODEL" --tasks $tasks $extra \
+      --output-dir "$OUT" > "$OUT/$SUITE-$name.log" 2>&1
+  local rc=$?
+  [ $rc -ne 0 ] && { echo "<<< [$TAG/$SUITE:$name] 실패 rc=$rc"; tail -5 "$OUT/$SUITE-$name.log"; }
+  return $rc
+}
+
 case "$SUITE" in
-  korean) TASKS="kobest_boolq kobest_copa kobest_hellaswag kobest_sentineg kobest_wic haerae"; EXTRA="" ;;
-  coding) TASKS="humaneval_instruct mbpp_plus_instruct"; EXTRA="--apply-chat-template --confirm-run-unsafe-code"
-          export HF_ALLOW_CODE_EVAL=1 ;;
+  korean)
+    run_pass all "kobest_boolq kobest_copa kobest_hellaswag kobest_sentineg kobest_wic haerae"
+    rc=$?
+    ;;
+  coding)
+    export HF_ALLOW_CODE_EVAL=1
+    run_pass instruct "humaneval_instruct" "--apply-chat-template --confirm-run-unsafe-code"
+    rc=$?
+    run_pass plus "humaneval_plus mbpp_plus" "--confirm-run-unsafe-code"
+    rc=$(( rc | $? ))
+    ;;
   *) echo "알 수 없는 스위트: $SUITE"; exit 2 ;;
 esac
 
-echo ">>> [$TAG/$SUITE] $MODEL  $(date '+%F %T')"
-"$PY/mlx_lm.evaluate" --model "$MODEL" --tasks $TASKS $EXTRA \
-    --output-dir "$OUT" > "$OUT/$SUITE.log" 2>&1
-rc=$?
 if [ $rc -eq 0 ]; then
   touch "$OUT/DONE.$SUITE"; echo "<<< [$TAG/$SUITE] 완료"
 else
-  echo "<<< [$TAG/$SUITE] 실패 rc=$rc"; tail -5 "$OUT/$SUITE.log"
+  echo "<<< [$TAG/$SUITE] 실패 rc=$rc"
 fi
 exit $rc

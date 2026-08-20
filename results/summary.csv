@@ -13,7 +13,6 @@ base-1.5b,kobest_hellaswag,acc,0.3980,0.0219,500,no
 base-1.5b,kobest_sentineg,acc,0.5239,0.0251,397,yes
 base-1.5b,kobest_wic,acc,0.4881,0.0141,1260,yes
 base-1.5b,mbpp_plus,pass_at_1,0.6349,0.0248,378,no
-base-1.5b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
 base-32b,haerae,acc,0.7113,0.0136,1091,no
 base-32b,haerae_general_knowledge,acc,0.5682,0.0374,176,no
 base-32b,haerae_history,acc,0.6543,0.0348,188,no
@@ -42,7 +41,6 @@ base-7b,kobest_hellaswag,acc,0.4660,0.0223,500,no
 base-7b,kobest_sentineg,acc,0.9295,0.0129,397,no
 base-7b,kobest_wic,acc,0.5111,0.0141,1260,yes
 base-7b,mbpp_plus,pass_at_1,0.6429,0.0247,378,no
-base-7b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
 base-8b,haerae,acc,0.5710,0.0148,1091,no
 base-8b,haerae_general_knowledge,acc,0.4034,0.0371,176,no
 base-8b,haerae_history,acc,0.5213,0.0365,188,no
@@ -69,7 +67,6 @@ base-coder-1.5b,kobest_hellaswag,acc,0.3660,0.0216,500,no
 base-coder-1.5b,kobest_sentineg,acc,0.6423,0.0241,397,no
 base-coder-1.5b,kobest_wic,acc,0.4881,0.0141,1260,yes
 base-coder-1.5b,mbpp_plus,pass_at_1,0.6640,0.0243,378,no
-base-coder-1.5b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
 base-coder-14b,humaneval_instruct,pass@1,0.9085,0.0226,164,no
 base-coder-14b,humaneval_plus,pass@1,0.7927,0.0318,164,no
 base-coder-14b,mbpp_plus,pass_at_1,0.8757,0.0170,378,no
@@ -79,7 +76,6 @@ base-coder-32b,mbpp_plus,pass_at_1,0.8069,0.0203,378,no
 base-coder-7b,humaneval_instruct,pass@1,0.8841,0.0251,164,no
 base-coder-7b,humaneval_plus,pass@1,0.7622,0.0333,164,no
 base-coder-7b,mbpp_plus,pass_at_1,0.8228,0.0197,378,no
-base-coder-7b,mbpp_plus_instruct,pass_at_1,0.0053,0.0037,378,no
 gaiel-1.5b,haerae,acc,0.3758,0.0143,1091,no
 gaiel-1.5b,haerae_general_knowledge,acc,0.3011,0.0347,176,no
 gaiel-1.5b,haerae_history,acc,0.2606,0.0321,188,no
@@ -92,7 +88,6 @@ gaiel-1.5b,kobest_copa,acc,0.5760,0.0156,1000,no
 gaiel-1.5b,kobest_hellaswag,acc,0.3420,0.0212,500,no
 gaiel-1.5b,kobest_sentineg,acc,0.5239,0.0251,397,yes
 gaiel-1.5b,kobest_wic,acc,0.4897,0.0141,1260,yes
-gaiel-1.5b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
 gaiel-32b,haerae,acc,0.6544,0.0142,1091,no
 gaiel-32b,haerae_general_knowledge,acc,0.4773,0.0378,176,no
 gaiel-32b,haerae_history,acc,0.6277,0.0354,188,no
@@ -117,7 +112,6 @@ gaiel-7b,kobest_copa,acc,0.6840,0.0147,1000,no
 gaiel-7b,kobest_hellaswag,acc,0.4360,0.0222,500,no
 gaiel-7b,kobest_sentineg,acc,0.6700,0.0236,397,no
 gaiel-7b,kobest_wic,acc,0.4905,0.0141,1260,yes
-gaiel-7b,mbpp_plus_instruct,pass_at_1,0.0000,0.0000,378,no
 gaiel-8b,haerae,acc,0.3969,0.0148,1091,no
 gaiel-8b,haerae_general_knowledge,acc,0.3068,0.0349,176,no
 gaiel-8b,haerae_history,acc,0.4043,0.0359,188,no

@@ -2,8 +2,13 @@
 import json, os, re, sys, time, urllib.request
 from pathlib import Path
 
-WORK = Path("/Users/K/omni-work")
+# 작업 디렉터리. 문항·채점 템플릿·생성 결과가 모두 여기 쌓인다.
+# LOGICKOR_WORK 로 바꿀 수 있다. 준비물은 scripts/logickor_setup.sh 가 만든다.
+WORK = Path(os.environ.get("LOGICKOR_WORK", Path.home() / "omni-work"))
 sys.path.insert(0, str(WORK))
+for _f in ("logickor_templates.py", "logickor_questions.jsonl"):
+    if not (WORK / _f).exists():
+        sys.exit(f"{WORK/_f} 없음 — scripts/logickor_setup.sh 를 먼저 실행하라")
 # 채점 템플릿은 공식 저장소에서 받아 쓴다 (재배포하지 않음):
 #   curl -sL https://raw.githubusercontent.com/instructkr/LogicKor/main/templates.py \
 #        -o logickor_templates.py
@@ -14,7 +19,23 @@ from logickor_templates import JUDGE_TEMPLATE  # noqa
 
 MODEL = sys.argv[1] if len(sys.argv) > 1 else "encredible/Gaiel-32B-Korean-Tuned-MLX-3bit"
 TAG = sys.argv[2] if len(sys.argv) > 2 else "32b-3bit"
-EXO = "http://jaegwanui-macbookpro.local:52415/v1/chat/completions"
+# exo 엔드포인트. `.local` mDNS 는 간헐적으로 해석에 실패하므로(같은 머신에서도
+# nodename nor servname provided 로 죽는다) 응답하는 주소를 골라 쓴다.
+# EXO_HOST 로 명시 지정할 수 있다 — 예) EXO_HOST=http://jg-macbookair.local:52415
+def _pick_exo():
+    cands = [os.environ["EXO_HOST"]] if os.environ.get("EXO_HOST") else [
+        "http://127.0.0.1:52415",                      # 같은 머신이면 가장 안정적
+        "http://jaegwanui-macbookpro.local:52415",     # 다른 머신에서 돌릴 때
+    ]
+    for base in cands:
+        try:
+            urllib.request.urlopen(base + "/state", timeout=5).read(1)
+            return base
+        except Exception:
+            continue
+    return cands[-1]  # 전부 실패하면 마지막 후보로 시도하고 chat() 의 재시도에 맡긴다
+
+EXO = _pick_exo() + "/v1/chat/completions"
 GEN_OUT = WORK / f"logickor_gen_{TAG}.jsonl"
 JUDGE_OUT = WORK / f"logickor_judge_{TAG}.jsonl"
 
