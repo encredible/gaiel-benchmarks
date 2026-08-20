@@ -25,10 +25,33 @@
 
 단위는 % 입니다. 한국어는 정확도(logprob), 코딩은 pass@1(생성 코드 실제 실행)입니다.
 
+### ⚠️ `gaiel-8b` 의 수치는 단독으로 인용하지 말 것
+
+`Gaiel-8B-Korean-Tuned` 는 `tokenizer_config.json` 이 존재하지 않는 클래스(`TokenizersBackend`)를
+지정해 표준 transformers/vLLM 으로 로드되지 않았고, **측정 시 베이스 토크나이저로 대체**했다
+([docs/ARCHIVE.md](docs/ARCHIVE.md)). 학습 때와 다른 토크나이저로 추론한 결과이므로,
+코딩 **−50.0pt** 가 학습 탓인지 토크나이저 불일치 탓인지 **분리되지 않는다.**
+
+토크나이저를 고쳐 다시 재기 전까지 이 행은 회귀의 근거로 쓰지 않는다. 다른 세 체급
+(1.5B/7B/32B)의 회귀는 이 문제와 무관하며 결론은 그대로 유효하다.
+
+### 튜닝본 적용 경로가 모델마다 다르다
+
+| 태그 | 평가 방식 |
+|---|---|
+| `gaiel-32b` | 베이스 + **LoRA 런타임 적용** (`enable_lora=True`) |
+| `gaiel-1.5b`, `gaiel-7b` | 로컬 **사전 병합본** (`/workspace/merged/…` — 파드 소멸로 재현 불가) |
+| `gaiel-8b` | HF **병합본 직접** (위 토크나이저 문제 있음) |
+
+병합 경로가 다르면 검증 수준도 다르다. `gaiel-1.5b`/`gaiel-7b` 는 MLX 체크포인트를 PEFT 로
+변환해 등가를 확인했으나(ΔW 최대오차 0.000e+00), 나머지는 그런 확인이 없다.
+
 ## 관련 저장소
 
-- **[encredible/gaiel-llm-engine](https://github.com/encredible/gaiel-llm-engine)** — MLX 추론 서버,
+- **[encredible/gaiel-exo](https://github.com/encredible/gaiel-exo)** — MLX 추론 서버,
   저비트 양자화 도구, 파인튜닝 감사 결과와 재학습 계획
+- **[encredible/gaiel-runpod](https://github.com/encredible/gaiel-runpod)** — 합성 데이터 생성과
+  LoRA 학습 파이프라인 (CUDA)
 
 ## 작업 기록
 
@@ -48,11 +71,17 @@ RunPod 환경 구축에서 막힌 지점과 해결책은 **[docs/RUNPOD.md](docs
 
 ## 재현 방법
 
+> ⚠️ **위 표의 수치는 이 스크립트로 만들어지지 않았다.** `results/` 의 원본 JSON 은 전부
+> `"model": "vllm"` / `dtype: bfloat16` — RunPod A40 에서 **베이스 + LoRA 어댑터**로 측정한 값이다.
+> 아래 `run_eval.sh` 는 `mlx_lm.evaluate`(MLX 4-bit)를 쓰므로 **다른 수치가 나온다.**
+> 양자화 조건이 달라 같은 표에 올릴 수 없다 — 표를 채우려면 RunPod bf16 으로 돌려야 한다.
+> MLX 로 돌린 결과는 별도 표로 분리할 것.
+
 ```bash
 git clone https://github.com/encredible/gaiel-benchmarks
 cd gaiel-benchmarks
 pip install "lm-eval>=0.4.5" mlx-lm
-./scripts/run_all.sh          # 전체 매트릭스 (순차, 재개 가능)
+./scripts/run_all.sh          # 전체 매트릭스 (순차, 재개 가능) — MLX 4-bit 기준
 python3 scripts/collect.py    # 결과 → 표 갱신
 ```
 
